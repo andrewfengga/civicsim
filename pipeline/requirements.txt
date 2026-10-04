@@ -1,0 +1,9 @@
+osmnx>=1.9
+networkx>=3.2
+pygris>=0.1.6
+geopandas>=0.14
+shapely>=2.0
+pandas>=2.1
+numpy>=1.26
+scipy>=1.11
+scikit-learn>=1.3

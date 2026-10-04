@@ -1,0 +1,205 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+
+#map { position: absolute; top: 0; bottom: 0; left: 320px; right: 0; }
+
+#panel {
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 320px;
+  background: #111827;
+  color: #f3f4f6;
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.25);
+}
+#panel::-webkit-scrollbar { width: 8px; }
+#panel::-webkit-scrollbar-track { background: transparent; }
+#panel::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+
+#panel h1 { font-size: 20px; margin: 0 0 4px; }
+.subtitle { font-size: 13px; color: #9ca3af; margin: 0 0 20px; line-height: 1.4; }
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6b7280;
+  margin: 20px 0 8px;
+}
+.section-label:first-of-type { margin-top: 0; }
+
+/* --- Loading overlay ------------------------------------------------- */
+#loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: #111827;
+  color: #d1d5db;
+  font-size: 14px;
+  transition: opacity 0.3s ease;
+}
+#loading-overlay.hidden { opacity: 0; pointer-events: none; }
+.spinner {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 3px solid #374151;
+  border-top-color: #f97316;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* --- Onboarding hint --------------------------------------------------- */
+#onboarding-hint {
+  position: absolute;
+  top: 16px;
+  left: 340px;
+  right: 16px;
+  z-index: 900;
+  background: #1f2937;
+  color: #f3f4f6;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  animation: fade-in-down 0.4s ease;
+}
+@keyframes fade-in-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Flex items default to min-width:auto (sized to their unwrapped content),
+   so without this the hint text pushes the box wider than the viewport
+   instead of wrapping — a classic flexbox overflow trap, not visible until
+   tested at real phone width. */
+#onboarding-hint span { flex: 1; min-width: 0; }
+#onboarding-dismiss {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+#onboarding-dismiss:hover { color: #f3f4f6; }
+
+#metric-controls { margin-bottom: 16px; }
+#metric-toggle { display: flex; background: #1f2937; border-radius: 8px; padding: 3px; margin-bottom: 12px; }
+.metric-toggle-btn {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+.metric-toggle-btn.active { background: #374151; color: #f9fafb; }
+.metric-toggle-btn, #controls button, #optimizer-row button {
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+.metric-toggle-btn:active, #controls button:active, #optimizer-row button:active { transform: scale(0.97); }
+#target-slider-label { display: block; font-size: 12px; color: #9ca3af; margin-bottom: 6px; }
+#target-slider { width: 100%; accent-color: #16a34a; }
+
+#metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 4px; }
+.metric { background: #1f2937; border-radius: 8px; padding: 12px; transition: background-color 0.2s ease; }
+.metric-value { display: block; font-size: 22px; font-weight: 700; color: #f9fafb; }
+.metric-label { display: block; font-size: 11px; color: #9ca3af; margin-top: 4px; line-height: 1.3; }
+
+#controls { display: flex; gap: 8px; }
+#controls button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #374151;
+  color: #f3f4f6;
+  cursor: pointer;
+  font-size: 13px;
+}
+#controls button:hover { background: #4b5563; }
+
+#legend { font-size: 13px; margin-bottom: 4px; }
+#legend div { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  border: 2px solid transparent;
+}
+/* Border weight, not just hue, distinguishes these — helps readers who
+   have trouble telling green/orange/red apart, not only color choice. */
+.swatch-covered { background: #16a34a; }
+.swatch-outside { background: #f97316; border-color: rgba(0, 0, 0, 0.25); }
+.swatch-unreachable { background: #7f1d1d; border-color: #f3f4f6; border-width: 2px; }
+
+#optimizer { margin-bottom: 4px; }
+#optimizer label { display: block; font-size: 12px; color: #9ca3af; margin-bottom: 8px; }
+#optimizer-row { display: flex; gap: 8px; }
+#optimizer-row input {
+  width: 56px;
+  padding: 10px 8px;
+  border: none;
+  border-radius: 6px;
+  background: #1f2937;
+  color: #f3f4f6;
+  font-size: 13px;
+}
+#optimizer-row button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #b45309;
+  color: #fff8f0;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+#optimizer-row button:hover { background: #d97706; }
+#optimizer-row button:disabled { background: #4b5563; color: #9ca3af; cursor: default; transform: none; }
+
+#optimizer-results { font-size: 12px; color: #d1d5db; margin-top: 10px; line-height: 1.5; }
+#optimizer-results ol { margin: 0; padding-left: 18px; }
+
+#status { font-size: 12px; color: #9ca3af; line-height: 1.5; margin-top: 16px; }
+#status.error { color: #fca5a5; }
+
+.candidate-station-icon { font-size: 22px; text-align: center; line-height: 24px; }
+.recommended-station-icon { font-size: 22px; text-align: center; line-height: 24px; }
+
+/* Visible keyboard focus on every interactive control — mouse/touch users
+   never see this (:focus-visible skips them), keyboard users always do. */
+button:focus-visible, input:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+  #panel { width: 100%; height: 45%; bottom: auto; padding: 16px; }
+  #map { left: 0; top: 45%; }
+  /* left: 60px clears Leaflet's zoom control, which otherwise sits right
+     under the hint's top-left corner at this width. */
+  #onboarding-hint { left: 60px; right: 8px; top: calc(45% + 8px); font-size: 12px; }
+  .section-label { margin: 14px 0 6px; }
+}

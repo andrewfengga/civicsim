@@ -1,0 +1,20 @@
+{
+  "name": "civicsim-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CivicSim travel-time engine (Dijkstra, coverage stats). Zero runtime dependencies by design \u2014 see engine/binaryHeap.ts.",
+  "scripts": {
+    "build": "tsc -p .",
+    "build:web": "tsc -p tsconfig.browser.json && node scripts/copy-data.js",
+    "publish": "npm run build:web && node scripts/publish-docs.js",
+    "pretest": "npm run build && node -e \"require('fs').copyFileSync('src/engine/__tests__/fixture.json','dist/engine/__tests__/fixture.json')\"",
+    "test": "node dist/engine/__tests__/dijkstra.test.js && node dist/engine/__tests__/loadGraph.test.js && node dist/engine/__tests__/optimizer.test.js && node dist/engine/__tests__/distanceGraph.test.js && node dist/webapp/__tests__/nearestNode.test.js",
+    "benchmark": "npm run build && node dist/engine/__tests__/benchmark.js",
+    "gen-fixture": "python3 src/engine/__tests__/generate_fixture.py",
+    "check-coverage": "npm run build && node dist/scripts/checkCoverage.js",
+    "serve": "npm run build:web && echo \"Now run: cd .. && python -m http.server 8000   (from the PROJECT ROOT, not web/) then open http://localhost:8000/web/public/index.html\""
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}
