@@ -1,4 +1,4 @@
-# CivicSim — Fire/EMS Station Coverage for Georgia's 7th Congressional District
+﻿# CivicSim â€” Fire/EMS Station Coverage for Georgia's 7th Congressional District
 
 CivicSim shows how well fire/EMS stations cover Georgia's 7th Congressional
 District, using real road travel times and real Census population data. Click
@@ -6,13 +6,13 @@ anywhere on the map to test a new station location; the coverage numbers
 update instantly. An optimizer recommends the best spots for a set number of
 new stations.
 
-**Live site:** https://GITHUB_USERNAME.github.io/civicsim/
+**Live site:** https://andrewfengga.github.io/civicsim/
 
 ## What's in here
 
 ```
-pipeline/   Python — builds the study-area data from OpenStreetMap + Census
-web/        TypeScript — travel-time engine (Dijkstra) and the browser map app
+pipeline/   Python â€” builds the study-area data from OpenStreetMap + Census
+web/        TypeScript â€” travel-time engine (Dijkstra) and the browser map app
 docs/       The built site, served by GitHub Pages
 data/       Generated graph data (civicsim_graph.json is committed; the rest is regenerable)
 ```
@@ -90,5 +90,6 @@ Runs correctness checks, including a comparison against NetworkX shortest paths.
 
 ## Credits
 
-Map data © OpenStreetMap contributors. Population data: U.S. Census Bureau.
+Map data Â© OpenStreetMap contributors. Population data: U.S. Census Bureau.
 Map rendering: Leaflet.
+
